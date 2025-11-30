@@ -1,0 +1,432 @@
+<Christmas App html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Christmas Party Countdown 🎄</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg1: #0b1220;
+      --bg2: #143c3c;
+      --accent: #f97316;
+      --accent-soft: rgba(248, 250, 252, 0.1);
+      --card-bg: rgba(15, 23, 42, 0.8);
+      --text-main: #f9fafb;
+      --text-soft: #e5e7eb;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #14532d 0, #020617 55%);
+      color: var(--text-main);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* === FULL BACKGROUND HEAVY SNOW === */
+    .snowflake {
+      position: fixed;
+      top: -10vh;
+      color: white;
+      z-index: 1;
+      user-select: none;
+      pointer-events: none;
+      opacity: 0.9;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fallHeavy {
+      0% { transform: translateY(-10vh); }
+      100% { transform: translateY(120vh); }
+    }
+
+    @keyframes fallSlow {
+      0% { transform: translateY(-10vh); }
+      100% { transform: translateY(120vh); }
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 5;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      border-radius: 24px;
+      padding: 2rem 1.75rem 2.5rem;
+      background: linear-gradient(
+          135deg,
+          rgba(148, 163, 184, 0.12),
+          rgba(15, 23, 42, 0.95)
+        );
+      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      backdrop-filter: blur(20px);
+      display: grid;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 2.5rem 2.75rem 3rem;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+        align-items: center;
+      }
+    }
+
+    .header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      font-size: 0.75rem;
+      color: #bbf7d0;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 2.3vw + 1.3rem, 2.6rem);
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .subheading {
+      color: var(--text-soft);
+      font-size: 0.95rem;
+      max-width: 32rem;
+    }
+
+    .party-date {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .countdown {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    @media (min-width: 600px) {
+      .countdown {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .time-block {
+      padding: 0.8rem 0.6rem;
+      border-radius: 16px;
+      background: radial-gradient(circle at top left, #22c55e22, transparent 60%),
+        var(--card-bg);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      text-align: center;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.8);
+    }
+
+    .time-value {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .time-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+      margin-top: 0.25rem;
+    }
+
+    .status-message {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #bbf7d0;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* === JOKE SECTION === */
+    .joke-card {
+      padding: 1.4rem 1.3rem;
+      border-radius: 18px;
+      background: radial-gradient(circle at top right, #f9731622, transparent 60%),
+        var(--card-bg);
+      border: 1px solid rgba(248, 250, 252, 0.14);
+      box-shadow: 0 18px 32px rgba(15, 23, 42, 0.8);
+    }
+
+    .joke-title {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    .joke-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.18);
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--text-soft);
+      float: right;
+      margin-top: -35px;
+    }
+
+    .joke-text {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text-soft);
+    }
+
+    .footer-note {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="snow-container"></div>
+
+  <div class="wrapper">
+    <div class="card">
+      <!-- COUNTDOWN SECTION -->
+      <section>
+        <div class="header-tag">
+          <span>🎄</span> Christmas Party Countdown
+        </div>
+
+        <h1>Time until the Christmas Party</h1>
+
+        <p class="subheading">
+          Get ready for ugly sweaters, questionable eggnog, and the best
+          Christmas playlist since 1994.
+        </p>
+
+        <p class="party-date">
+          <span>📅</span>
+          <span id="party-date-text">Christmas Party: December 24</span>
+        </p>
+
+        <div class="countdown" id="countdown">
+          <div class="time-block">
+            <span class="time-value" id="days">--</span>
+            <span class="time-label">Days</span>
+          </div>
+          <div class="time-block">
+            <span class="time-value" id="hours">--</span>
+            <span class="time-label">Hours</span>
+          </div>
+          <div class="time-block">
+            <span class="time-value" id="minutes">--</span>
+            <span class="time-label">Minutes</span>
+          </div>
+          <div class="time-block">
+            <span class="time-value" id="seconds">--</span>
+            <span class="time-label">Seconds</span>
+          </div>
+        </div>
+
+        <p class="status-message" id="status-message">
+          <span>✨</span>
+          <span>Counting down the seconds until the party starts…</span>
+        </p>
+      </section>
+
+      <!-- JOKE OF THE DAY -->
+      <section class="joke-card">
+        <div class="joke-title">Christmas Joke of the Day</div>
+        <div class="joke-date" id="joke-date"></div>
+
+        <div class="badge">
+          <span>🎅</span> Auto-refreshes daily
+        </div>
+
+        <div class="joke-text" id="joke-text">Loading festive humor…</div>
+      </section>
+    </div>
+
+    <p class="footer-note">
+      Hosted on GitHub Pages · Built with 🎄, ☕, and questionable Christmas puns.
+    </p>
+  </div>
+
+
+  <script>
+    // ====== COUNTDOWN CONFIG ======
+    const partyDate = new Date(new Date().getFullYear(), 11, 24, 18, 0, 0);
+
+    (function adjustPartyYearIfNeeded() {
+      const now = new Date();
+      if (now > partyDate) {
+        partyDate.setFullYear(now.getFullYear() + 1);
+      }
+      const options = { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" };
+      document.getElementById("party-date-text").textContent =
+        "Christmas Party: " + partyDate.toLocaleString(undefined, options);
+    })();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = partyDate.getTime() - now;
+
+      const daysEl = document.getElementById("days");
+      const hoursEl = document.getElementById("hours");
+      const minutesEl = document.getElementById("minutes");
+      const secondsEl = document.getElementById("seconds");
+      const statusEl = document.getElementById("status-message");
+
+      if (distance <= 0) {
+        daysEl.textContent = "00";
+        hoursEl.textContent = "00";
+        minutesEl.textContent = "00";
+        secondsEl.textContent = "00";
+        statusEl.innerHTML = "<span>🎉</span> It's party time!";
+        return;
+      }
+
+      const oneSecond = 1000;
+      const oneMinute = oneSecond * 60;
+      const oneHour = oneMinute * 60;
+      const oneDay = oneHour * 24;
+
+      const days = Math.floor(distance / oneDay);
+      const hours = Math.floor((distance % oneDay) / oneHour);
+      const minutes = Math.floor((distance % oneHour) / oneMinute);
+      const seconds = Math.floor((distance % oneMinute) / oneSecond);
+
+      daysEl.textContent = String(days).padStart(2, "0");
+      hoursEl.textContent = String(hours).padStart(2, "0");
+      minutesEl.textContent = String(minutes).padStart(2, "0");
+      secondsEl.textContent = String(seconds).padStart(2, "0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+
+    // ====== JOKE OF THE DAY ======
+    const jokes = [
+      "Why did Santa get a parking ticket on Christmas Eve? He left his sleigh in a snow-parking zone.",
+      "Why is it so cold at Christmas? Because it’s Decemberrrr!",
+      "What do you call an elf that runs away from Santa’s workshop? A rebel without a Claus.",
+      "Why did the Christmas tree go to the barber? It needed a trim-tree.",
+      "What do snowmen eat for breakfast? Frosted Flakes.",
+      "Why did the ornament go to school? It wanted to be a little brighter.",
+      "How much did Santa pay for his sleigh? Nothing — it was on the house.",
+      "What do you call a kid who doesn’t believe in Santa? A rebel without a Claus.",
+      "Why did Santa’s helper see the doctor? Because he had low elf-esteem.",
+      "What’s Santa’s favorite kind of music? Wrap music.",
+      "Why is Santa so good at karate? He has a black belt in gift-wrapping.",
+      "What do you get if you cross a snowman and a dog? Frostbite.",
+      "Why was the snowman looking through the carrots? He was picking his nose.",
+      "How does a snowman get around? By riding an icicle.",
+      "What do you call a broke Santa Claus? Saint Nickel-less.",
+      "Why does Santa go down the chimney? Because it soots him.",
+      "What did the gingerbread man put on his bed? A cookie sheet.",
+      "What do you call an elf who tells jokes? A jolly good fellow.",
+      "Why did the turkey join the Christmas band? Because it had the drumsticks.",
+      "What’s a snowman’s favorite drink? Iced tea."
+    ];
+
+    function getDayOfYear(date) {
+      const start = new Date(date.getFullYear(), 0, 0);
+      const diff = date - start + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
+      return Math.floor(diff / (1000 * 60 * 60 * 24));
+    }
+
+    function setJokeOfTheDay() {
+      const today = new Date();
+      const dayOfYear = getDayOfYear(today);
+      const jokeIndex = dayOfYear % jokes.length;
+
+      document.getElementById("joke-text").textContent = jokes[jokeIndex];
+
+      const opts = { weekday: "long", month: "short", day: "numeric", year: "numeric" };
+      document.getElementById("joke-date").textContent =
+        today.toLocaleDateString(undefined, opts);
+    }
+    setJokeOfTheDay();
+
+
+    // ====== FULL BACKGROUND SNOW ======
+    function createSnowflakes() {
+      const container = document.getElementById("snow-container");
+
+      const mainCount = 150;   
+      const bgCount = 120;     
+      const total = mainCount + bgCount;
+
+      for (let i = 0; i < total; i++) {
+        const flake = document.createElement("div");
+        flake.classList.add("snowflake");
+
+        const shapes = ["❅", "❆", "✦", "•"];
+        flake.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+
+        flake.style.left = Math.random() * 100 + "vw";
+        flake.style.top = Math.random() * 100 + "vh";
+
+        if (i < mainCount) {
+          flake.style.fontSize = (0.8 + Math.random() * 1.8) + "rem";
+          flake.style.opacity = 0.9;
+          flake.style.animationDuration = (4 + Math.random() * 6) + "s";
+          flake.style.animationName = "fallHeavy";
+          flake.style.zIndex = 3;
+        } else {
+          flake.style.fontSize = (0.4 + Math.random() * 0.8) + "rem";
+          flake.style.opacity = 0.4;
+          flake.style.animationDuration = (8 + Math.random() * 12) + "s";
+          flake.style.animationName = "fallSlow";
+          flake.style.zIndex = 2;
+        }
+
+        flake.style.animationDelay = Math.random() * 5 + "s";
+
+        container.appendChild(flake);
+      }
+    }
+
+    createSnowflakes();
+  </script>
+</body>
+</html>
